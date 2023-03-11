@@ -261,10 +261,10 @@ if __name__ == "__main__":
     print("Train set accuracy = " + str(score_train))
     print("Test set accuracy = " + str(score_test))
 
-    # # mlflow.log_metric("score_trains", str(score_train))
-    # # mlflow.log_metric("score_test", str(score_test))
-    # # mlflow.sklearn.log_model(logreg, "model", registered_model_name="soc-ml")
-    # # print("Model saved in run %s" % mlflow.active_run().info.run_uuid)
+    mlflow.log_metric("score_trains", str(score_train))
+    mlflow.log_metric("score_test", str(score_test))
+    mlflow.sklearn.log_model(logreg, "model", registered_model_name="soc-ml")
+    print("Model saved in run %s" % mlflow.active_run().info.run_uuid)
 
     print("----------- Predict ------------")
     # X_new = np.array(X[1653].toarray())
