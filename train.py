@@ -10,6 +10,7 @@ from sklearn.compose import make_column_transformer
 from sklearn.preprocessing import OneHotEncoder
 from sklearn.preprocessing import LabelEncoder
 
+from sharelib import maskOfficeHour,maskThreat
 ########### mflow ############
 import mlflow
 import mlflow.sklearn
@@ -19,18 +20,6 @@ import logging
 
 logging.basicConfig(level=logging.WARN)
 logger = logging.getLogger(__name__)
-
-def maskThreat(df):
-    toThreatHourStr = '08:00:00.000'
-    fromThreatHourStr = '17:00:00.000'
-    # countryStr = ["Russian Federation","Slovakia","China","Netherlands","Thailand"]
-    countryStr = ["Russian Federation"]
-    return df.assign(is_threat=pd.Series('no', index=df.index).mask(((df['mt.ads_country_dst'].isin(countryStr)) & ((df['@timestamp'].str[-12:]<toThreatHourStr) | (df['@timestamp'].str[-12:]>fromThreatHourStr))), 'yes'))
-
-def maskOfficeHour(df):
-    fromHourStr = '08:00:00.000'
-    toHourStr = '17:00:00.000'
-    return df.assign(is_OfficeHour=pd.Series('no', index=df.index).mask((((df['@timestamp'].str[-12:]>=fromHourStr) & (df['@timestamp'].str[-12:]<=toHourStr))), 'yes'))
 
 # def eval_metrics(actual, pred):
 #     rmse = np.sqrt(mean_squared_error(actual, pred))
@@ -42,20 +31,20 @@ if __name__ == "__main__":
 
     df = pd.read_csv("data/firewall-traffic.csv")
 
-    print("---------- data frame ---------")
-    print(df.head())
-    print(df.info())
-    print(df.describe())
-    print("---------- data frame ---------")
+    # print("---------- data frame ---------")
+    # print(df.head())
+    # print(df.info())
+    # print(df.describe())
+    # print("---------- data frame ---------")
     
-    print("---------- @timestamp ---------")
-    print(df["@timestamp"])
-    print("---------- @timestamp ---------")
+    # print("---------- @timestamp ---------")
+    # print(df["@timestamp"])
+    # print("---------- @timestamp ---------")
     
     df_country = df["mt.ads_country_dst"]
-    print("---------- df_country ---------")
-    print(df_country)
-    print(df_country.value_counts())
+    # print("---------- df_country ---------")
+    # print(df_country)
+    # print(df_country.value_counts())
     # Name: mt.ads_country_dst, Length: 6679, dtype: object
     # Thailand                       3610
     # 10.0.0.0-10.255.255.255        1489
@@ -90,39 +79,38 @@ if __name__ == "__main__":
     # Brazil                            1
     # Canada                            1
     # Name: mt.ads_country_dst, dtype: int64
-    print("---------- df_country ---------")
+    # print("---------- df_country ---------")
 
     df_OfficeHour = maskOfficeHour(df)
-    print("---------- df_OfficeHour ---------")
-    print(df_OfficeHour['is_OfficeHour']) 
-    print(df_OfficeHour['is_OfficeHour'].value_counts()) 
-    # no     6678
-    # yes       1 
-    print("---------- df_OfficeHour ---------")
+    # print("---------- df_OfficeHour ---------")
+    # print(df_OfficeHour['is_OfficeHour']) 
+    # print(df_OfficeHour['is_OfficeHour'].value_counts()) 
+    # # no     6678
+    # # yes       1 
+    # print("---------- df_OfficeHour ---------")
 
     
     # df['is_threat'] = pd.Series('no', index=df.index).mask(df['mt.ads_country_dst']=="Russian Federation", 'yes')    
     df_threat = maskThreat(df)
-    print("---------- Y ---------")
-    print(df_threat['is_threat'].value_counts())    
-    # no     6667
-    # yes      12
-    # Name: is_threat, dtype: int64
-    print("---------- Y ---------")
+    # print("---------- Y ---------")
+    # print(df_threat['is_threat'].value_counts())    
+    # # no     6667
+    # # yes      12
+    # # Name: is_threat, dtype: int64
+    # print("---------- Y ---------")
 
     df_categories = pd.concat([df_country, df_OfficeHour['is_OfficeHour']], axis=1, sort=False,)
-    # df_categories.columns = ["mt.ads_country_dst","is_OfficeHour"]
-    print("---------- df_categories ---------")
-    print(df_categories)   
-    print(df_categories.value_counts())
+    # print("---------- df_categories ---------")
+    # print(df_categories)   
+    # print(df_categories.value_counts())
 
-    print(type(df_categories))
-    print(df_categories.describe)
-    print(df_categories.info())
+    # print(type(df_categories))
+    # print(df_categories.describe)
+    # print(df_categories.info())
 
-    print("---------- df_categories 1653 ---------")    
-    print(df_categories.iloc[1653])
-    print("---------- df_categories 1653 ---------")
+    # print("---------- df_categories 1653 ---------")    
+    # print(df_categories.iloc[1653])
+    # print("---------- df_categories 1653 ---------")
     
 
     # mt.ads_country_dst           is_OfficeHour
@@ -162,7 +150,7 @@ if __name__ == "__main__":
     # dtype: int64   
     print("---------- df_categories ---------")
 
-    print("---------- X_label ---------")
+    # print("---------- X_label ---------")
     # Create a LabelEncoder object and fit it to each feature in X
     # X_label = df_categories.apply(LabelEncoder().fit_transform)
     # print(X_label.value_counts())
@@ -201,34 +189,34 @@ if __name__ == "__main__":
     # 17                  0                   1
     # 16                  0                   1
     # dtype: int64
-    print("---------- X_label ---------")
+    # print("---------- X_label ---------")
 
-    print("---------- X ---------")
+    # print("---------- X ---------")
     # Create a OneHotEncoder object, and fit it to all of X
     enc = OneHotEncoder(handle_unknown='ignore')
     X_transform = make_column_transformer((enc,['mt.ads_country_dst']),(enc,['is_OfficeHour']))
     X_transform.fit(df_categories)
     X = X_transform.transform(df_categories)
-    print(enc.categories)
-    print(X_transform)
-    print("---------- X_1hot Test ---------")
+    # print(enc.categories)
+    # print(X_transform)
+    # print("---------- X_1hot Test ---------")
 
-    print(type(X))
+    # print(type(X))
     # <class 'scipy.sparse._csr.csr_matrix'>    
-    print(X[1653])
+    # print(X[1653])
     # (0, 23)       1.0
     # (0, 32)       1.0
-    print(X[1653].toarray())
+    # print(X[1653].toarray())
     # [[0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 1. 0. 0. 0. 0. 0. 0. 0. 0. 1. 0.]]
-    print("---------- X_1hot Test ---------")
-    print("---------- X ---------")
+    # print("---------- X_1hot Test ---------")
+    # print("---------- X ---------")
     
-    print("---------- y ---------")    
+    # print("---------- y ---------")    
     y = df_threat['is_threat']
-    print(y)
-    print(y.value_counts())
-    print(y[1653])
-    print(y.loc[y == "yes"])
+    # print(y)
+    # print(y.value_counts())
+    # print(y[1653])
+    # print(y.loc[y == "yes"])
     # 1653    yes
     # 1886    yes
     # 2232    yes
@@ -241,7 +229,7 @@ if __name__ == "__main__":
     # 4758    yes
     # 4900    yes
     # 5495    yes
-    print("---------- y ---------")
+    # print("---------- y ---------")
 
     print("---------------------")
     # # Split the data into train and test set
@@ -266,25 +254,27 @@ if __name__ == "__main__":
     mlflow.sklearn.log_model(logreg, "model", registered_model_name="soc-ml")
     print("Model saved in run %s" % mlflow.active_run().info.run_uuid)
 
-    print("----------- Predict ------------")
+    # print("----------- Predict ------------")
     # X_new = np.array(X[1653].toarray())
     # print(X_new)
     
     # # Make a prediction
-    test_df = pd.DataFrame([
-    ['Russian Federation','no']
-    ])
-    test_df.columns = ["mt.ads_country_dst","is_OfficeHour"]
-    print(test_df)
-    print(test_df.info())
+    # test_df = pd.DataFrame([
+    # ['Russian Federation','Feb 22, 2023 @ 17:59:59.942']
+    # ])
+    # test_df.columns = ["mt.ads_country_dst","@timestamp"]
+    # test_df = maskOfficeHour(test_df)
+    # test_df = test_df.drop(['@timestamp'], axis=1)
+    # print(test_df)
+    # print(test_df.info())
 
     # # X_transform fron all data fit
     # print(X_transform)
-    X_new = X_transform.transform(test_df)
-    print("X_new : " , X_new)
+    # X_new = X_transform.transform(test_df)
+    # print("X_new : " , X_new)
 
-    y_pred = logreg.predict(X_new)
-    y_pred_prob = logreg.predict_proba(X_new)
-    print("Prediction:", y_pred, "with the probability array:", y_pred_prob)
-    print("Predicted target name:", y_pred[0])
-    print("----------- Predict ------------")
+    # y_pred = logreg.predict(X_new)
+    # y_pred_prob = logreg.predict_proba(X_new)
+    # print("Prediction:", y_pred, "with the probability array:", y_pred_prob)
+    # print("Predicted target name:", y_pred[0])
+    # print("----------- Predict ------------")
