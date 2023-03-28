@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+import os
 
 import matplotlib.pyplot as plt
 
@@ -249,10 +250,28 @@ if __name__ == "__main__":
     print("Train set accuracy = " + str(score_train))
     print("Test set accuracy = " + str(score_test))
 
-    mlflow.log_metric("score_trains", str(score_train))
-    mlflow.log_metric("score_test", str(score_test))
-    mlflow.sklearn.log_model(logreg, "model", registered_model_name="soc-ml")
-    print("Model saved in run %s" % mlflow.active_run().info.run_uuid)
+    tracking_uri = os.environ["MLFLOW_TRACKING_URI"]
+    
+    # experiment_id = mlflow.create_experiment("soc-ml-api2")
+    experiment = mlflow.get_experiment_by_name('soc-ml-default')
+    experiment_id = experiment.experiment_id
+
+    with mlflow.start_run(experiment_id=experiment_id) as run:
+        mlflow.set_tracking_uri(tracking_uri)
+        # experiment = mlflow.get_experiment_by_name('soc-ml-api2')
+        print("Artifact Location: {}".format(experiment.artifact_location))
+        print("artifact uri : " + mlflow.get_artifact_uri())
+
+        mlflow.doctor()
+
+        mlflow.log_metric("score_trains", str(score_train))
+        mlflow.log_metric("score_test", str(score_test))
+        mlflow.sklearn.log_model(logreg, "model", registered_model_name="soc-ml")
+        print("Model saved in run %s" % mlflow.active_run().info.run_uuid)
+
+
+
+
 
     # print("----------- Predict ------------")
     # X_new = np.array(X[1653].toarray())
