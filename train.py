@@ -256,7 +256,7 @@ if __name__ == "__main__":
     experiment = mlflow.get_experiment_by_name('soc-ml-default')
     experiment_id = experiment.experiment_id
 
-    with mlflow.start_run(experiment_id=experiment_id) as run:
+    with mlflow.start_run(experiment_id=experiment_id):
         mlflow.set_tracking_uri(tracking_uri)
         # experiment = mlflow.get_experiment_by_name('soc-ml-api2')
         print("Artifact Location: {}".format(experiment.artifact_location))
