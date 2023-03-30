@@ -69,7 +69,15 @@
         0.0,  0.0,  1.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  
         0.0,  0.0,  1.0,  0.0]]}}"                                      \
     http://127.0.0.1:1234/invocations | jq
-
+    
+    curl -X POST -H "Content-Type:application/json"                     \
+    --data "{\"dataframe_split\": {\"data\":[[                          \
+        0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  
+        0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  
+        0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
+        0.0,  0.0,  1.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  
+        0.0,  0.0,  1.0,  0.0]]}}"                                      \
+    http://nginx-auth-test.tdg-int.net/invocations -u 'ingress_user:xxxxxxxxxxxxxxxxxxxxxx' | jq
 ## On Gateway
 
     curl -X POST -H "Content-Type:application/json"                     \
