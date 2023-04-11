@@ -1,8 +1,20 @@
-# Run on Local
+# Run on Local WSL Ubuntu 20.04 
+## need python 3.9
+
+    sudo apt update
+    sudo apt install software-properties-common
+    sudo add-apt-repository ppa:deadsnakes/ppa
+    sudo apt install python3.9
+    python3.9 --version
+
+    curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+    python3.9 get-pip.py
+
+    pip3.9 install -r requirements.txt
+    python3.9 train.py
+
     mlflow server --host 0.0.0.0 -p 8889
     export MLFLOW_TRACKING_URI=http://127.0.0.1:8889
-
-    python train.py
 
 # Run mlflow
 
