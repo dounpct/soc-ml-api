@@ -13,8 +13,11 @@
     pip3.9 install -r requirements.txt
     python3.9 train.py
 
-    mlflow server --host 0.0.0.0 -p 8889
-    export MLFLOW_TRACKING_URI=http://127.0.0.1:8889
+        mlflow ui
+        export MLFLOW_TRACKING_URI=http://127.0.0.1:5000
+    or 
+        mlflow server --host 0.0.0.0 -p 8889
+        export MLFLOW_TRACKING_URI=http://127.0.0.1:8889
 
 # Run mlflow
 
