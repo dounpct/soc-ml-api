@@ -1,6 +1,6 @@
 # Run on Local WSL Ubuntu 20.04 
 ## need python 3.9
-
+    
     sudo apt update
     sudo apt install software-properties-common
     sudo add-apt-repository ppa:deadsnakes/ppa
@@ -11,6 +11,8 @@
     python3.9 get-pip.py
 
     pip3.9 install -r requirements.txt
+    
+    ### please load firewall-traffic.csv to folder data
     python3.9 train.py
 
         mlflow ui
