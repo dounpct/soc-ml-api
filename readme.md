@@ -70,6 +70,21 @@
         ]
     }
 
+## On Gateway
+
+    http://127.0.0.1:6789/v1/gateway
+    {"data": 
+        {"data":
+            [["Russian Federation","Feb 22, 2023 @ 16:59:59.942"]]
+        }
+    }
+
+    http://127.0.0.1:6789/v2/gateway
+    {
+        "country": "Russian Federation",
+        "timestamp": "Feb 22, 2023 @ 16:59:59.942"
+    }
+
     ----------------------------------------------------------------------
 
 
@@ -110,13 +125,41 @@
 
     curl -X POST -H "Content-Type:application/json"                     \
     --data "{\"data\": {\"data\":[[\"Russian Federation\",\"no\"]]}}"  \
-    http://127.0.0.1:5000/gateway | jq
+    http://127.0.0.1:5000/v1/gateway | jq
 
     {
         "predictions": [
             "yes"
         ]
     }
+
+    curl -X POST -H "Content-Type:application/json"                     \
+    --data "{\"data\": {\"data\":[[\"Russian Federation\",\"Feb 22, 2023 @ 16:59:59.942\"]]}}"  \
+    http://127.0.0.1:6789/v1/gateway | jq
+
+    {
+        "predictions": [
+            "no"
+        ]
+    }
+
+    curl -X POST -H "Content-Type:application/json"                     \
+    --data '{"country": "Russian Federation","timestamp": "Feb 22, 2023 @ 16:59:59.942"}'  \
+    http://127.0.0.1:6789/v2/gateway | jq
+
+    {
+        "predictions": [
+            "no"
+        ]
+    }
+
+    while true;do curl -X POST -H "Content-Type:application/json"                     \
+    --data "{\"data\": {\"data\":[[\"Russian Federation\",\"Feb 22, 2023 @ 16:59:59.942\"]]}}"  \
+    http://127.0.0.1:6789/v1/gateway;done
+
+    while true;do curl -X POST -H "Content-Type:application/json"                     \
+    --data '{"country": "Russian Federation","timestamp": "Feb 22, 2023 @ 16:59:59.942"}'  \
+    http://127.0.0.1:6789/v2/gateway;done
     
 
 ## Docker Rum
