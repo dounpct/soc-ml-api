@@ -162,10 +162,11 @@
     http://127.0.0.1:6789/v2/gateway;done
     
 
-## Docker Rum
-
+## Docker Run
+    docker build -t mlflow_serving:v1 .
     docker run --name mlflow-api -p 6543:5000 -e MODEL_URI=gs://mlflow_gke_test_20230314/5/8911fc4e3a514e969cac16d157b008ed/artifacts/model -e SERVING_PORT=5000 -e GOOGLE_APPLICATION_CREDENTIALS="/data/app/secret/gcp.json" -v /mnt/d/firework/gcr-authen-json/gcp-dmp-devops.json:/data/app/secret/gcp.json mlflow_serving:v1
 
-## Docker Rum into container
+## Docker Run into container
+    docker build -t mlflow_serving:v1 .
 
     docker run -it --entrypoint bash --name mlflow-api -p 6543:5000 -e MODEL_URI=gs://mlflow_gke_test_20230314/5/8911fc4e3a514e969cac16d157b008ed/artifacts/model -e SERVING_PORT=5000 -e GOOGLE_APPLICATION_CREDENTIALS="/data/app/secret/gcp.json" -v /mnt/d/firework/gcr-authen-json/gcp-dmp-devops.json:/data/app/secret/gcp.json mlflow_serving:v1
